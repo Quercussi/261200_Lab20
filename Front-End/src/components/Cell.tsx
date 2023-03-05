@@ -12,7 +12,7 @@ const Cell = ({ x, y, symbol, mark }: CellProps) => {
     <td
       draggable="true"
       style={{
-        backgroundColor: symbol,
+        backgroundColor: "#ffffff",
         width: "200px",
         height: "200px",
         cursor: "pointer",
