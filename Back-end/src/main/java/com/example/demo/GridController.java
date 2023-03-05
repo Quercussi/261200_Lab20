@@ -8,21 +8,21 @@ import org.springframework.messaging.simp.annotation.SubscribeMapping;
 import org.springframework.stereotype.Controller;
 
 @Controller
-public class CanvasController {
+public class GridController {
     @Autowired
     private SimpMessagingTemplate template;
 
     @Autowired
-    private Canvas canvas;
+    private Grid grid;
 
-    @MessageMapping("/paint")
-    @SendTo("/topic/canvas")
-    public Canvas paint(PaintMessage paintMessage) {
-        return canvas.paint(paintMessage);
+    @MessageMapping("/mark")
+    @SendTo("/topic/grid")
+    public Grid mark(MarkMessage markMessage) {
+        return grid.mark(markMessage);
     }
 
-    @SubscribeMapping("/canvas")
-    public Canvas sendInitialCanvas() {
-        return canvas;
+    @SubscribeMapping("/grid")
+    public Grid sendInitialGrid() {
+        return grid;
     }
 }

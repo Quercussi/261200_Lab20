@@ -4,40 +4,49 @@ import { Client } from "@stomp/stompjs";
 import Cell from "./Cell";
 
 let client: Client;
-
-let color: string;
+let id: string;
+// let color: string;
 
 function Canvas() {
-  const [colorGrid, setColorGrid] = useState([[]]);
+  const [grid, setGrid] = useState([[]]);
 
   useEffect(() => {
     if (!client) {
-      color = "#" + Math.floor(Math.random() * 16777215).toString(16);
+      // color = "#" + Math.floor(Math.random() * 16777215).toString(16);
       client = new Client({
         brokerURL: "ws://localhost:8080/demo-websocket",
-        onConnect: () => {
-        client.subscribe("/app/canvas", (message) => {
-          const body = JSON.parse(message.body);
-          setColorGrid(body["colorGrid"]);
-        });
 
-        client.subscribe("/topic/canvas", (message) => {
-          const body = JSON.parse(message.body);
-          setColorGrid(body["colorGrid"]);
-        });
-      }});
+        onConnect: () => {
+          client.publish({
+            destination: "/app/join",
+            body: id,
+          });
+          client.subscribe("/app/grid", (message) => {
+            const body = JSON.parse(message.body);
+            setGrid(body["grid"]);
+          });
+
+          client.subscribe("/topic/grid", (message) => {
+            const body = JSON.parse(message.body);
+            console.log(message.body);
+            setGrid(body["grid"]);
+          });
+        },
+      });
 
       client.activate();
+      id = "" + Math.random();
+      console.log(id);
     }
   }, []);
 
-  const paint = (x: number, y: number) => {
+  const mark = (x: number, y: number) => {
     if (client) {
       if (client.connected) {
         client.publish({
-          destination: "/app/paint",
+          destination: "/app/mark",
           body: JSON.stringify({
-            color: color, // random color
+            token: id,
             posX: x,
             posY: y,
           }),
@@ -54,15 +63,15 @@ function Canvas() {
         }}
       >
         <tbody>
-          {colorGrid.map((row, j) => (
+          {grid.map((row, j) => (
             <tr key={j}>
-              {row.map((col, i) => (
+              {Array.from(row).map((col, i) => (
                 <Cell
                   x={i}
                   y={j}
+                  mark={mark}
                   key={`${i}${j}`}
-                  paint={paint}
-                  color={colorGrid[j][i]}
+                  symbol={grid[j][i]}
                 />
               ))}
             </tr>

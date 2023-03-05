@@ -1,8 +1,10 @@
 package com.example.demo;
 
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.event.EventListener;
 import org.springframework.messaging.simp.config.MessageBrokerRegistry;
 import org.springframework.web.socket.config.annotation.*;
+import org.springframework.web.socket.messaging.SessionSubscribeEvent;
 
 @Configuration
 @EnableWebSocketMessageBroker
