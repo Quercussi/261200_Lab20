@@ -56,7 +56,7 @@ function Canvas() {
   };
 
   return (
-    <div style={{ position: "absolute", left: "37%", bottom: "27%" }}>
+    <div style={{ position: "absolute", left: "33%", bottom: "18%" }}>
       <table
         style={{
           borderCollapse: "collapse",
