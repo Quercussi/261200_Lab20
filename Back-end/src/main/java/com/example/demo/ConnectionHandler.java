@@ -1,7 +1,6 @@
 package com.example.demo;
 
 import org.springframework.messaging.handler.annotation.MessageMapping;
-import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.stereotype.Controller;
 
 import java.nio.charset.StandardCharsets;
@@ -13,7 +12,7 @@ import java.util.Base64;
 public class ConnectionHandler {
     private static MessageDigest digest;
 
-    private int userCount = 0;
+    static int userCount = 0;
     static String user1;
     static String user2;
 

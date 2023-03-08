@@ -9,6 +9,10 @@ let id: string;
 
 function Canvas() {
   const [grid, setGrid] = useState([[]]);
+  const [color, setColor] = useState([[]]);
+
+  const [showRestart, setShowRestart] = useState(false);
+  const [hasJoined, setHasJoined] = useState(false);
 
   useEffect(() => {
     if (!client) {
@@ -17,19 +21,25 @@ function Canvas() {
         brokerURL: "ws://localhost:8080/demo-websocket",
 
         onConnect: () => {
-          client.publish({
-            destination: "/app/join",
-            body: id,
-          });
           client.subscribe("/app/grid", (message) => {
             const body = JSON.parse(message.body);
             setGrid(body["grid"]);
+            setColor(body["colorGrid"]);
+            setShowRestart(false);
+            console.log(body);
           });
 
           client.subscribe("/topic/grid", (message) => {
             const body = JSON.parse(message.body);
             console.log(message.body);
             setGrid(body["grid"]);
+            setColor(body["colorGrid"]);
+            const winner = body["winner"];
+            if (winner === "x" || winner === "o" || winner === "t") {
+              setShowRestart(true);
+              setHasJoined(false);
+            } else setShowRestart(false);
+            console.log(body);
           });
         },
       });
@@ -39,6 +49,15 @@ function Canvas() {
       console.log(id);
     }
   }, []);
+
+  useEffect(() => {
+    if (hasJoined) {
+      client.publish({
+        destination: "/app/join",
+        body: id,
+      });
+    }
+  }, [hasJoined]);
 
   const mark = (x: number, y: number) => {
     if (client) {
@@ -70,14 +89,31 @@ function Canvas() {
                   x={i}
                   y={j}
                   mark={mark}
+                  hasJoined={hasJoined}
+                  setHasJoined={setHasJoined}
                   key={`${i}${j}`}
                   symbol={grid[j][i]}
+                  color={color[j][i]}
                 />
               ))}
             </tr>
           ))}
         </tbody>
       </table>
+      {showRestart ? (
+        <button
+          onClick={() => {
+            client.publish({
+              destination: "/app/restart",
+            });
+            setShowRestart(false);
+          }}
+        >
+          RESTART
+        </button>
+      ) : (
+        ""
+      )}
     </div>
   );
 }
