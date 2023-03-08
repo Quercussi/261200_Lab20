@@ -13,10 +13,12 @@ const Cell = ({ x, y, symbol, mark }: CellProps) => {
       draggable="true"
       style={{
         backgroundColor: "#ffffff",
-        width: "1.5rem",
-        height: "1.5rem",
+        width: "175px",
+        height: "175px",
         cursor: "pointer",
         border: "1px solid",
+        fontSize: "60px",
+        fontWeight: "bold",
       }}
       onClick={() => mark(x, y)}
       onDragEnter={() => mark(x, y)}

@@ -5,14 +5,14 @@ import Cell from "./Cell";
 
 let client: Client;
 let id: string;
-// let color: string;
+//let color: string;
 
 function Canvas() {
   const [grid, setGrid] = useState([[]]);
 
   useEffect(() => {
     if (!client) {
-      // color = "#" + Math.floor(Math.random() * 16777215).toString(16);
+      //color = "#" + Math.floor(Math.random() * 16777215).toString(16);
       client = new Client({
         brokerURL: "ws://localhost:8080/demo-websocket",
 
@@ -56,7 +56,7 @@ function Canvas() {
   };
 
   return (
-    <div>
+    <div style={{ position: "absolute", left: "33%", bottom: "18%" }}>
       <table
         style={{
           borderCollapse: "collapse",
