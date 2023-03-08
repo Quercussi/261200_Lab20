@@ -13,8 +13,8 @@ const Cell = ({ x, y, symbol, mark }: CellProps) => {
       draggable="true"
       style={{
         backgroundColor: "#ffffff",
-        width: "200px",
-        height: "200px",
+        width: "175px",
+        height: "175px",
         cursor: "pointer",
         border: "1px solid",
         fontSize: "60px",
