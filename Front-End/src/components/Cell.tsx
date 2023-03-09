@@ -37,7 +37,7 @@ const Cell = ({
       }}
       onDragEnter={() => mark(x, y)}
     >
-      {symbol === "e" ? " " : symbol}
+      {symbol}
     </td>
   );
 };
